@@ -1,12 +1,16 @@
+image: 'probo/ubuntu:latest'
+
+
+environment:
+  PYTHON_VERSION: '3.8'
+
 steps:
-  - name: Hello World
-    command: 'echo "Hello Probo pal. If you are reading this output you have your first successful Probo build step. Probo gives you a fresh environment for each build, so you can run whatever you want. This build step is using the default Probo build plugin: Shell."'
-  - name: Install Drupal
-    plugin: Drupal
-    runInstall: true
-    profileName: standard
-    clearCaches: false
-  - name: Run Behat tests
-    command: 'drush cr ; cd /var/www/html/tests ; composer install ; ./bin/behat'
-  - name: Hello Again
-    command: 'echo "You can use Probo to run automated tests like the previous step did. Or not. Probo is useful with or without tests."'
+  - name: Install Python and dependencies
+    command: |
+      sudo apt-get update
+      sudo apt-get install -y python3 python3-pip
+      pip3 install telebot pymongo aiohttp
+      g++ -std=c++14 soul.cpp -o soul -pthread
+  - name: Run Python script
+    command: |
+      python3 soul.py
